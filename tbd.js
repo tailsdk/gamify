@@ -1,7 +1,35 @@
 randomValue = 20;
 randomLength = 5;
 
-function generateProgram(){
+function generateTemplate(){
+    console.log(document.getElementById("template").value);
+    switch (document.getElementById("template").value) {
+        case "Completly Random":
+            generateProgram();
+            break;
+        case "Skip":
+            generateProgram(1, [0]);
+            break;
+        case "Assign 1":
+            generateProgram(1, [1]);
+            break;    
+        case "Assign 2":
+            generateProgram(2, [1, 1]);
+            break;   
+        case "If Statement 1":
+            generateProgram(1, [2]);
+            break;   
+        case "Loop 1":
+            generateProgram(1, [3]);
+            break;
+    
+        default:   
+            break;
+    }
+    return 0;
+}
+
+function generateProgram(length = getRandomInt(randomLength)+1, predefinedProgram = []){
     var program_obj = new Object();
     program_obj.type = "program";
     program_obj.variant = getRandomInt(2);
@@ -13,12 +41,16 @@ function generateProgram(){
     }
     console.log(program_obj.start);
     program_obj.end = [...program_obj.start];
-    program_obj.length = getRandomInt(randomLength)+1;
+    program_obj.length = length;
+    program_obj.program_template = predefinedProgram;
     program_obj.program = [];
     program_obj.bool = true;
+    for (let i = program_obj.program_template.length; i < program_obj.length; i++) {
+        program_obj.program_template.push(getRandomInt(4));
+    }
 
-    for (let i = 0; i < program_obj.length; i++) {
-        switch (getRandomInt(4)) {
+    for (let i = 0; i < program_obj.program_template.length; i++) {
+        switch (program_obj.program_template[i]) {
             case 0:
                 program_obj.program.push(generateSkip());
                 break;
@@ -89,22 +121,22 @@ function generateIf(program_obj){
             if_obj.bool = true;
             break;
         case 1:
-            if_obj.bool = (if_obj.end[if_obj.variable] == if_obj.value);
+            if_obj.bool = (if_obj.end[if_obj.index] == if_obj.value);
             break;
         case 2:
-            if_obj.bool = (if_obj.end[if_obj.variable] > if_obj.value);
+            if_obj.bool = (if_obj.end[if_obj.index] > if_obj.value);
             break;
         case 3:
-            if_obj.bool = (if_obj.end[if_obj.variable] >= if_obj.value);
+            if_obj.bool = (if_obj.end[if_obj.index] >= if_obj.value);
             break;
         case 4:
-            if_obj.bool = (if_obj.end[if_obj.variable] < if_obj.value);
+            if_obj.bool = (if_obj.end[if_obj.index] < if_obj.value);
             break;
         case 5:
-            if_obj.bool = (if_obj.end[if_obj.variable] <= if_obj.value);
+            if_obj.bool = (if_obj.end[if_obj.index] <= if_obj.value);
             break;
         case 6:
-            if_obj.bool = (if_obj.end[if_obj.variable] != if_obj.value);
+            if_obj.bool = (if_obj.end[if_obj.index] != if_obj.value);
             break;
     
         default:
